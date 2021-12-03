@@ -5,12 +5,12 @@ import Html exposing (Html, text)
 
 main : Html msg
 main =
-    text (Debug.toString answer)
+    text (Debug.toString (answer input))
 
 
-answer : Int
-answer =
-    input
+answer : String -> Int
+answer rawInput =
+    rawInput
         |> getMeasurements
         |> pairWithNextMeasurement
         |> getDepthChanges
