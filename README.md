@@ -2,6 +2,10 @@
 
 <https://adventofcode.com/>
 
-Using [elm](https://elm-lang.org/).
+This is my first time doing this. I doubt I'll get very far.
 
-Run with `elm reactor`
+I'm using [elm](https://elm-lang.org/) with a goal of readable,
+self-documenting code using composable functions.
+
+To run the examples, after installing elm,
+run `elm reactor` from this directory.
