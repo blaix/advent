@@ -2,8 +2,10 @@ module Main exposing (main)
 
 import Browser
 import Day01.Part1
-import Html exposing (Html, div, p, text, textarea)
-import Html.Events exposing (onInput)
+import Day01.Part2
+import Html exposing (Html, a, div, li, p, text, textarea, ul)
+import Html.Attributes exposing (href)
+import Html.Events exposing (onClick, onInput)
 
 
 main : Program () Model Msg
@@ -15,14 +17,19 @@ main =
         }
 
 
+type alias Solver =
+    String -> Int
+
+
 type alias Model =
     { input : String
-    , solver : String -> Int
+    , solver : Solver
     }
 
 
 type Msg
     = InputChanged String
+    | SolverChanged Solver
 
 
 sampleInput : String
@@ -54,6 +61,9 @@ update msg model =
         InputChanged newInput ->
             { model | input = newInput }
 
+        SolverChanged newSolver ->
+            { model | solver = newSolver }
+
 
 view : Model -> Html Msg
 view model =
@@ -67,4 +77,15 @@ view model =
             [ onInput InputChanged ]
             [ text model.input ]
         , p [] [ text answer ]
+        , ul []
+            [ li []
+                -- TODO: persistent urls
+                [ a [ href "#", onClick (SolverChanged Day01.Part1.answer) ]
+                    [ text "Day 1 - Part 1" ]
+                ]
+            , li []
+                [ a [ href "#", onClick (SolverChanged Day01.Part2.answer) ]
+                    [ text "Day 1 - Part 2" ]
+                ]
+            ]
         ]
