@@ -3,7 +3,7 @@ module Main exposing (main)
 import Browser
 import Day01.Part1
 import Day01.Part2
-import Element exposing (centerX, column, el, fill, layout, link, padding, row, spacing, text, width)
+import Element exposing (Element, centerX, column, el, fill, layout, link, padding, row, spacing, text, width)
 import Element.Events exposing (onClick)
 import Element.Input as Input
 import Html exposing (Html)
@@ -78,25 +78,40 @@ view model =
             [ spacing 10
             , width fill
             ]
-            -- TODO: view functions for each column
-            [ column [ width fill ]
-                [ Input.multiline []
-                    { spellcheck = False
-                    , onChange = InputChanged
-                    , text = model.input
-                    , placeholder = Nothing
-                    , label = Input.labelAbove [] <| text "Input"
-                    }
-                ]
-            , column [ width fill ] [ el [ centerX ] (text answer) ]
+            [ column [ width fill ] <|
+                inputView model.input
+            , column [ width fill ] <|
+                answerView answer
             , column []
-                [ link [ onClick (SolverChanged Day01.Part1.answer) ]
-                    { url = "#"
-                    , label = text "Day 1 - Part 1"
-                    }
-                , link [ onClick (SolverChanged Day01.Part2.answer) ]
-                    { url = "#"
-                    , label = text "Day 1 - Part 2"
-                    }
-                ]
+                navigationView
             ]
+
+
+inputView : String -> List (Element Msg)
+inputView input =
+    [ Input.multiline []
+        { spellcheck = False
+        , onChange = InputChanged
+        , text = input
+        , placeholder = Nothing
+        , label = Input.labelAbove [] <| text "Input"
+        }
+    ]
+
+
+answerView : String -> List (Element Msg)
+answerView answer =
+    [ el [ centerX ] (text answer) ]
+
+
+navigationView : List (Element Msg)
+navigationView =
+    [ link [ onClick (SolverChanged Day01.Part1.answer) ]
+        { url = "#"
+        , label = text "Day 1 - Part 1"
+        }
+    , link [ onClick (SolverChanged Day01.Part2.answer) ]
+        { url = "#"
+        , label = text "Day 1 - Part 2"
+        }
+    ]
