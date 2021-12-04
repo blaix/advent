@@ -107,32 +107,25 @@ answerView answer =
 navigationView : List (Element Msg)
 navigationView =
     -- TODO: persistent links and active highlight
-    [ navLink [ onClick (SolverChanged Day01.part1) ]
+    [ link (linkAttrs [ onClick (SolverChanged Day01.part1) ])
         { url = "#"
         , label = text "Day 1 - Part 1"
         }
-    , navLink [ onClick (SolverChanged Day01.part2) ]
+    , link (linkAttrs [ onClick (SolverChanged Day01.part2) ])
         { url = "#"
         , label = text "Day 1 - Part 2"
         }
     ]
 
 
-navLink :
-    List (Attribute Msg)
-    -> { url : String, label : Element Msg }
-    -> Element Msg
-navLink attributes values =
-    let
-        allAttrs =
-            attributes
-                ++ [ padding 10
-                   , Border.widthEach
-                        { top = 0
-                        , left = 1
-                        , right = 0
-                        , bottom = 1
-                        }
-                   ]
-    in
-    link allAttrs values
+linkAttrs : List (Attribute Msg) -> List (Attribute Msg)
+linkAttrs additionalAttrs =
+    additionalAttrs
+        ++ [ padding 10
+           , Border.widthEach
+                { top = 0
+                , left = 1
+                , right = 0
+                , bottom = 1
+                }
+           ]
