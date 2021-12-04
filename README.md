@@ -9,3 +9,6 @@ self-documenting code using composable functions.
 
 To run the examples, after installing elm,
 run `elm reactor` from this directory.
+
+or use [elm-live](https://github.com/wking-io/elm-live) if you want debug mode:
+`elm-live src/Main.elm -- --debug`
