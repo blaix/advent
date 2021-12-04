@@ -3,7 +3,7 @@ module Main exposing (main)
 import Browser
 import Day01.Part1
 import Day01.Part2
-import Element exposing (column, layout, link, padding, row, spacing, text)
+import Element exposing (centerX, column, el, fill, layout, link, padding, row, spacing, text, width)
 import Element.Events exposing (onClick)
 import Element.Input as Input
 import Html exposing (Html)
@@ -46,7 +46,7 @@ sampleInput =
 269
 260
 263
-"""
+""" |> String.trim
 
 
 init : Model
@@ -75,15 +75,20 @@ view model =
     in
     layout [ padding 10 ] <|
         row
-            [ spacing 10 ]
-            [ Input.multiline []
-                { spellcheck = False
-                , onChange = InputChanged
-                , text = model.input
-                , placeholder = Nothing
-                , label = Input.labelAbove [] <| text "Input"
-                }
-            , text answer
+            [ spacing 10
+            , width fill
+            ]
+            -- TODO: view functions for each column
+            [ column [ width fill ]
+                [ Input.multiline []
+                    { spellcheck = False
+                    , onChange = InputChanged
+                    , text = model.input
+                    , placeholder = Nothing
+                    , label = Input.labelAbove [] <| text "Input"
+                    }
+                ]
+            , column [ width fill ] [ el [ centerX ] (text answer) ]
             , column []
                 [ link [ onClick (SolverChanged Day01.Part1.answer) ]
                     { url = "#"
