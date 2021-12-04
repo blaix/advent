@@ -4,7 +4,10 @@ import Browser
 import Day01
 import Element
     exposing
-        ( Element
+        ( Attribute
+        , Element
+        , alignRight
+        , alignTop
         , centerX
         , column
         , el
@@ -12,11 +15,13 @@ import Element
         , layout
         , link
         , padding
+        , paddingXY
         , row
-        , spacing
+        , shrink
         , text
         , width
         )
+import Element.Border as Border
 import Element.Events exposing (onClick)
 import Element.Input as Input
 import Html exposing (Html)
@@ -70,16 +75,14 @@ view model =
             model.solver model.input
                 |> String.fromInt
     in
-    layout [ padding 10 ] <|
+    layout [] <|
         row
-            [ spacing 10
-            , width fill
-            ]
-            [ column [ width fill ] <|
+            [ width fill ]
+            [ column [ padding 10, width fill ] <|
                 inputView model.input
-            , column [ width fill ] <|
+            , column [ paddingXY 10 50, alignTop, width fill ] <|
                 answerView answer
-            , column []
+            , column [ alignTop, alignRight ]
                 navigationView
             ]
 
@@ -98,17 +101,38 @@ inputView input =
 
 answerView : String -> List (Element Msg)
 answerView answer =
-    [ el [ centerX ] (text answer) ]
+    [ el [ centerX, width shrink, padding 10, Border.width 5 ] (text answer) ]
 
 
 navigationView : List (Element Msg)
 navigationView =
-    [ link [ onClick (SolverChanged Day01.part1) ]
+    -- TODO: persistent links and active highlight
+    [ navLink [ onClick (SolverChanged Day01.part1) ]
         { url = "#"
         , label = text "Day 1 - Part 1"
         }
-    , link [ onClick (SolverChanged Day01.part2) ]
+    , navLink [ onClick (SolverChanged Day01.part2) ]
         { url = "#"
         , label = text "Day 1 - Part 2"
         }
     ]
+
+
+navLink :
+    List (Attribute Msg)
+    -> { url : String, label : Element Msg }
+    -> Element Msg
+navLink attributes values =
+    let
+        allAttrs =
+            attributes
+                ++ [ padding 10
+                   , Border.widthEach
+                        { top = 0
+                        , left = 1
+                        , right = 0
+                        , bottom = 1
+                        }
+                   ]
+    in
+    link allAttrs values
