@@ -1,9 +1,22 @@
 module Main exposing (main)
 
 import Browser
-import Day01.Part1
-import Day01.Part2
-import Element exposing (Element, centerX, column, el, fill, layout, link, padding, row, spacing, text, width)
+import Day01
+import Element
+    exposing
+        ( Element
+        , centerX
+        , column
+        , el
+        , fill
+        , layout
+        , link
+        , padding
+        , row
+        , spacing
+        , text
+        , width
+        )
 import Element.Events exposing (onClick)
 import Element.Input as Input
 import Html exposing (Html)
@@ -33,26 +46,10 @@ type Msg
     | SolverChanged Solver
 
 
-sampleInput : String
-sampleInput =
-    """
-199
-200
-208
-210
-200
-207
-240
-269
-260
-263
-""" |> String.trim
-
-
 init : Model
 init =
-    { input = sampleInput
-    , solver = Day01.Part1.answer
+    { input = Day01.input
+    , solver = Day01.part1
     }
 
 
@@ -106,11 +103,11 @@ answerView answer =
 
 navigationView : List (Element Msg)
 navigationView =
-    [ link [ onClick (SolverChanged Day01.Part1.answer) ]
+    [ link [ onClick (SolverChanged Day01.part1) ]
         { url = "#"
         , label = text "Day 1 - Part 1"
         }
-    , link [ onClick (SolverChanged Day01.Part2.answer) ]
+    , link [ onClick (SolverChanged Day01.part2) ]
         { url = "#"
         , label = text "Day 1 - Part 2"
         }
