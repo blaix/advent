@@ -3,9 +3,10 @@ module Main exposing (main)
 import Browser
 import Day01.Part1
 import Day01.Part2
-import Html exposing (Html, a, div, li, p, text, textarea, ul)
-import Html.Attributes exposing (href)
-import Html.Events exposing (onClick, onInput)
+import Element exposing (column, layout, link, padding, row, spacing, text)
+import Element.Events exposing (onClick)
+import Element.Input as Input
+import Html exposing (Html)
 
 
 main : Program () Model Msg
@@ -72,20 +73,25 @@ view model =
             model.solver model.input
                 |> String.fromInt
     in
-    div []
-        [ textarea
-            [ onInput InputChanged ]
-            [ text model.input ]
-        , p [] [ text answer ]
-        , ul []
-            [ li []
-                -- TODO: persistent urls
-                [ a [ href "#", onClick (SolverChanged Day01.Part1.answer) ]
-                    [ text "Day 1 - Part 1" ]
-                ]
-            , li []
-                [ a [ href "#", onClick (SolverChanged Day01.Part2.answer) ]
-                    [ text "Day 1 - Part 2" ]
+    layout [ padding 10 ] <|
+        row
+            [ spacing 10 ]
+            [ Input.multiline []
+                { spellcheck = False
+                , onChange = InputChanged
+                , text = model.input
+                , placeholder = Nothing
+                , label = Input.labelAbove [] <| text "Input"
+                }
+            , text answer
+            , column []
+                [ link [ onClick (SolverChanged Day01.Part1.answer) ]
+                    { url = "#"
+                    , label = text "Day 1 - Part 1"
+                    }
+                , link [ onClick (SolverChanged Day01.Part2.answer) ]
+                    { url = "#"
+                    , label = text "Day 1 - Part 2"
+                    }
                 ]
             ]
-        ]
