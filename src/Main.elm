@@ -2,6 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Day01
+import Day02
 import Element
     exposing
         ( Attribute
@@ -43,7 +44,7 @@ main =
 
 
 type alias Solver =
-    String -> Int
+    String -> String
 
 
 type alias Model =
@@ -79,7 +80,6 @@ view model =
     let
         answer =
             model.solver model.input
-                |> String.fromInt
     in
     layoutWith
         { options =
@@ -141,21 +141,40 @@ answerView answer =
 navigationView : List (Element Msg)
 navigationView =
     -- TODO: persistent links and active highlight
-    [ link (linkAttrs [ onClick (SolverChanged Day01.part1) ])
+    [ el (navAttrs []) (text "-- Day 1 --")
+    , link (navAttrs [ onClick (InputChanged Day01.input) ])
         { url = "#"
-        , label = text "Day 1 - Part 1"
+        , label = text "Sample Input"
         }
-    , link (linkAttrs [ onClick (SolverChanged Day01.part2) ])
+    , link (navAttrs [ onClick (SolverChanged Day01.part1) ])
         { url = "#"
-        , label = text "Day 1 - Part 2"
+        , label = text "Solve Part 1"
+        }
+    , link (navAttrs [ onClick (SolverChanged Day01.part2) ])
+        { url = "#"
+        , label = text "Solve Part 2"
+        }
+    , el (navAttrs []) (text "-- Day 2 --")
+    , link (navAttrs [ onClick (InputChanged Day02.input) ])
+        { url = "#"
+        , label = text "Sample Input"
+        }
+    , link (navAttrs [ onClick (SolverChanged Day02.part1) ])
+        { url = "#"
+        , label = text "Solve Part 1"
+        }
+    , link (navAttrs [ onClick (SolverChanged Day02.part2) ])
+        { url = "#"
+        , label = text "Solve Part 2"
         }
     ]
 
 
-linkAttrs : List (Attribute Msg) -> List (Attribute Msg)
-linkAttrs additionalAttrs =
+navAttrs : List (Attribute Msg) -> List (Attribute Msg)
+navAttrs additionalAttrs =
     additionalAttrs
         ++ [ padding 10
+           , width fill
            , Background.color colors.brown
            , Border.widthEach
                 { top = 0
