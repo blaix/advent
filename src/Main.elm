@@ -8,21 +8,27 @@ import Element
         , Element
         , alignRight
         , alignTop
-        , centerX
         , column
         , el
         , fill
-        , layout
+        , focusStyle
+        , height
+        , layoutWith
         , link
         , padding
+        , paddingEach
         , paddingXY
+        , px
+        , rgb255
         , row
-        , shrink
+        , spacing
         , text
         , width
         )
+import Element.Background as Background
 import Element.Border as Border
 import Element.Events exposing (onClick)
+import Element.Font as Font
 import Element.Input as Input
 import Html exposing (Html)
 
@@ -75,12 +81,25 @@ view model =
             model.solver model.input
                 |> String.fromInt
     in
-    layout [] <|
+    layoutWith
+        { options =
+            [ focusStyle
+                { borderColor = Nothing
+                , backgroundColor = Nothing
+                , shadow = Nothing
+                }
+            ]
+        }
+        [ Background.color colors.black
+        , Font.color colors.silver
+        ]
+    <|
         row
-            [ width fill ]
-            [ column [ padding 10, width fill ] <|
+            [ width fill, spacing 30, height fill ]
+            [ el [] Element.none
+            , column [ paddingXY 0 10, alignTop, width fill, height fill ] <|
                 inputView model.input
-            , column [ paddingXY 10 50, alignTop, width fill ] <|
+            , column [ paddingXY 0 10, alignTop, width fill, height fill ] <|
                 answerView answer
             , column [ alignTop, alignRight ]
                 navigationView
@@ -89,19 +108,34 @@ view model =
 
 inputView : String -> List (Element Msg)
 inputView input =
-    [ Input.multiline []
-        { spellcheck = False
-        , onChange = InputChanged
-        , text = input
-        , placeholder = Nothing
-        , label = Input.labelAbove [] <| text "Input"
-        }
+    [ el [ width fill ] <|
+        Input.multiline
+            [ Background.color colors.green
+            , Border.width 1
+            , height (px 500)
+            ]
+            { spellcheck = False
+            , onChange = InputChanged
+            , text = input
+            , placeholder = Nothing
+            , label = Input.labelAbove [] <| text "Input"
+            }
     ]
 
 
 answerView : String -> List (Element Msg)
 answerView answer =
-    [ el [ centerX, width shrink, padding 10, Border.width 5 ] (text answer) ]
+    [ el [ paddingEach { top = 0, left = 0, right = 0, bottom = 6 } ]
+        (text "Answer")
+    , el
+        [ padding 20
+        , Border.width 4
+        , Border.rounded 3
+        , Background.color colors.red
+        , Font.size 30
+        ]
+        (text answer)
+    ]
 
 
 navigationView : List (Element Msg)
@@ -122,6 +156,7 @@ linkAttrs : List (Attribute Msg) -> List (Attribute Msg)
 linkAttrs additionalAttrs =
     additionalAttrs
         ++ [ padding 10
+           , Background.color colors.brown
            , Border.widthEach
                 { top = 0
                 , left = 1
@@ -129,3 +164,19 @@ linkAttrs additionalAttrs =
                 , bottom = 1
                 }
            ]
+
+
+colors :
+    { red : Element.Color
+    , green : Element.Color
+    , silver : Element.Color
+    , black : Element.Color
+    , brown : Element.Color
+    }
+colors =
+    { red = rgb255 133 1 11
+    , green = rgb255 34 81 64
+    , silver = rgb255 170 170 170
+    , black = rgb255 30 30 30
+    , brown = rgb255 130 81 40
+    }
