@@ -14,7 +14,7 @@ input =
 269
 260
 263
-"""
+""" |> String.trim
 
 
 part1 : String -> String
