@@ -1,6 +1,7 @@
 module Main exposing (main)
 
-import Browser
+import Browser exposing (Document, UrlRequest)
+import Browser.Navigation as Nav
 import Day01
 import Day02
 import Element
@@ -32,14 +33,18 @@ import Element.Events exposing (onClick)
 import Element.Font as Font
 import Element.Input as Input
 import Html exposing (Html)
+import Url exposing (Url)
 
 
 main : Program () Model Msg
 main =
-    Browser.sandbox
+    Browser.application
         { init = init
         , update = update
         , view = view
+        , subscriptions = \_ -> Sub.none
+        , onUrlRequest = UrlRequested
+        , onUrlChange = UrlChanged
         }
 
 
@@ -56,27 +61,48 @@ type alias Model =
 type Msg
     = InputChanged String
     | SolverChanged Solver
+    | UrlRequested UrlRequest
+    | UrlChanged Url
 
 
-init : Model
-init =
-    { input = Day01.input
-    , solver = Day01.part1
-    }
+init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
+init _ _ _ =
+    ( { input = Day01.input
+      , solver = Day01.part1
+      }
+    , Cmd.none
+    )
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         InputChanged newInput ->
-            { model | input = newInput }
+            ( { model | input = newInput }
+            , Cmd.none
+            )
 
         SolverChanged newSolver ->
-            { model | solver = newSolver }
+            ( { model | solver = newSolver }
+            , Cmd.none
+            )
+
+        UrlRequested _ ->
+            ( model, Cmd.none )
+
+        UrlChanged _ ->
+            ( model, Cmd.none )
 
 
-view : Model -> Html Msg
+view : Model -> Document Msg
 view model =
+    { title = "Advent of Code 2021"
+    , body = [ bodyView model ]
+    }
+
+
+bodyView : Model -> Html Msg
+bodyView model =
     let
         answer =
             model.solver model.input
